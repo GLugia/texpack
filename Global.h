@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <sstream>
+#include <iomanip>
 
 using c8 = char;
 using c16 = short;
@@ -34,3 +36,11 @@ concept TClass = std::is_class_v<_Type>;
 
 template<typename _Type>
 concept TPointer = std::is_pointer_v<_Type>;
+
+template<TFundamental _Type>
+string to_hex(_Type type)
+{
+	std::stringstream ss;
+	ss << std::setfill('0') << std::setw(sizeof(_Type) * 2) << std::hex << type;
+	return ss.str();
+}
