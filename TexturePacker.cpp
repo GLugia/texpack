@@ -46,7 +46,7 @@ void TexturePacker::Read(Path from_texpack)
 	{
 		this->images[i].name = (c8*)std::malloc(headers[i].name_length);
 		reader.Read(this->images[i].name, headers[i].name_length);
-		std::cout << "  Reading " << this->images[i].name << " at " << std::hex << std::to_string(reader.GetPosition()) << "...";
+		std::cout << "  Reading " << this->images[i].name << " at 0x" << to_hex(reader.GetPosition()) << "...";
 		reader.Seek(headers[i].name_padding, FileDirection::CURRENT);
 		this->images[i].data = (c8*)std::malloc(this->images[i].size);
 		reader.Read(this->images[i].data, this->images[i].size);
@@ -91,17 +91,15 @@ void TexturePacker::Gather(Path from_directory)
 			Path path = entry.path();
 			std::cout << "  Reading \"" << path.string() + "\"...";
 
-			string file_name = path.filename().string();
-			if (file_name.length() > 16)
-			{
-				throw std::exception(("File names (including extension) must be 16 characters or less: \"" + file_name + "\"").c_str());
-			}
-
-			
 			Image image{};
 
 			// copy file name
+			string file_name = path.filename().string();
 			image.name = (c8*)std::malloc(file_name.size());
+			if (!image.name)
+			{
+				throw std::exception("Out of memory!");
+			}
 			std::strcpy(image.name, file_name.c_str());
 
 			// get the size of the file
@@ -109,6 +107,10 @@ void TexturePacker::Gather(Path from_directory)
 
 			// copy file data
 			image.data = (c8*)std::malloc(image.size);
+			if (!image.data)
+			{
+				throw std::exception("Out of memory!");
+			}
 			BinaryReader reader{};
 			reader.Open(path);
 			reader.Read(image.data, image.size);
@@ -140,7 +142,12 @@ void TexturePacker::Write(Path to_texpack)
 		std::cout << "  " << image.name << " header...";
 		u8 len = (u8)(std::strlen(image.name) + 1);
 		writer.Write((u8)len);
-		writer.Write((u8)(alignment - len));
+		u8 str_align = (u8)(len % alignment);
+		if (str_align != 0)
+		{
+			str_align = (u8)(alignment - str_align);
+		}
+		writer.Write(str_align);
 		writer.Write((u8)(alignment - (image.size % alignment)));
 		writer.Write((u8)0xCC);
 		writer.Write((s32)image.size);
