@@ -1,6 +1,4 @@
-# texpack
-
-[Arguments]
+# Arguments
 ```
 -help             : Prints this message.
 -pack [directory] : Packs all files (regardless of extension or type) into a texpack file.
@@ -10,7 +8,7 @@
 	Resulting files are placed in an /output/ directory relative to this executable's location.
 ```
 
-[Example]
+# Example
 ```
 texpack -pack "directory goes here"
 ```
