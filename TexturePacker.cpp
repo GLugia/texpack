@@ -133,7 +133,7 @@ void TexturePacker::Write(Path to_texpack)
 	writer.Open(to_texpack);
 	// write the number of files contained and align it to 16
 	writer.Write((c32)this->images.size());
-	writer.Align(alignment - sizeof(c32));
+	writer.Align(alignment);
 	// writer the metadata for each file
 	for (Image& image : this->images)
 	{
@@ -148,16 +148,16 @@ void TexturePacker::Write(Path to_texpack)
 	}
 	if (writer.GetPosition() % alignment != 0)
 	{
-		writer.Align(alignment - (writer.GetPosition() % alignment));
+		writer.Align(alignment);
 	}
 	for (Image& image : this->images)
 	{
 		std::cout << "  " << image.name << " data...";
 		u8 len = (u8)std::strlen(image.name);
 		writer.Write(image.name, len);
-		writer.Align(alignment - len);
+		writer.Align(alignment);
 		writer.Write(image.data, image.size);
-		writer.Align(alignment - (image.size % alignment));
+		writer.Align(alignment);
 		std::cout << "Done!" << std::endl;
 	}
 	writer.Flush();
