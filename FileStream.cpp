@@ -170,8 +170,8 @@ void BinaryWriter::Align(const s64 to_size)
 	if (mod != 0)
 	{
 		std::vector<c8> buffer{};
-		buffer.resize(to_size);
-		this->stream.write(buffer.data(), to_size);
+		buffer.resize(to_size - mod);
+		this->stream.write(buffer.data(), to_size - mod);
 	}
 }
 
