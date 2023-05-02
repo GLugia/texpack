@@ -35,7 +35,7 @@ c32 main(c32 argc, c8* argv[])
 			Path path = argv[2];
 			packer.Read(path);
 			path = std::filesystem::current_path() / Path("output") / path.filename().replace_extension();
-			std::filesystem::create_directory(path);
+			std::filesystem::create_directories(path);
 			packer.Dump(path);
 		}
 		else if (arg == pack && argc == 3)
