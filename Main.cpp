@@ -52,8 +52,9 @@ c32 main(c32 argc, c8* argv[])
 		else if (arg == help)
 		{
 			std::cout << "Format: -[unpack, pack] [target]" << std::endl;
-			std::cout << "-unpack [texpack] : Unpacks all images from the given .texpack file." << std::endl;
-			std::cout << "-pack [directory] : Packs all files contained in the given directory into a single .texpack file." << std::endl;
+			std::cout << "-help             : Prints this message." << std::endl;
+			std::cout << "-pack [directory] : Packs all files (regardless of extension or type) into a texpack file." << std::endl;
+			std::cout << "-unpack [texpack] : Unpacks all files from a texpack file." << std::endl;
 			std::cout << "\tResulting files will be placed in an /output/ folder relative to this executable's location." << std::endl;
 		}
 		else
